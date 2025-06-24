@@ -1,0 +1,29 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+.loader-bar {
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.6);
+}
+
+.loader-bar--h {
+  top: 50%; left: 4%;
+  width: 92%; height: 4px; border-radius: 2px;
+  animation: slideH 1.8s infinite ease-in-out;
+}
+
+.loader-bar--v {
+  left: 50%; top: 4%;
+  width: 4px; height: 92%; border-radius: 2px;
+  animation: slideV 1.5s infinite ease-in-out;
+}
+
+@keyframes slideH {
+  0%,100% { transform: translateX(-50%) scaleX(0.4); }
+  50% { transform: translateX(50%) scaleX(0.4); }
+}
+
+@keyframes slideV {
+  0%,100% { transform: translateY(-50%) scaleY(0.4); }
+  50% { transform: translateY(50%) scaleY(0.4); }
+}

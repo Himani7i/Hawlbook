@@ -28,15 +28,24 @@ const [date, setDate] = useState('');
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
   };
+  
+
 
 const handleUpload = async () => {
   if (!file) return toast.error("Please choose a file first");
+  const allowedTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'image/jpeg', 'image/png'];
 
+if (!allowedTypes.includes(file.type)) {
+  return toast.error("Invalid file type. Only images and documents allowed.");
+}
+  if (!title || !purpose || !date) {
+    return toast.error("Please fill in all fields.");
+  }
   const formData = new FormData();
   formData.append("notesheet", file);
   formData.append("title", title);
-formData.append("purpose", purpose);
-formData.append("date", date);
+ formData.append("purpose", purpose);
+ formData.append("date", date);
 
   const token = localStorage.getItem("token"); 
 
@@ -44,8 +53,8 @@ formData.append("date", date);
   try {
     const res = await API.post('/event/submit', formData, {
       headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'multipart/form-data',
+        'Authorization': `Bearer ${token}`
+        
       }
     });
 
@@ -93,7 +102,7 @@ formData.append("date", date);
   />
   <input
     type="file"
-    accept=".pdf,.docx"
+    accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
     onChange={handleFileChange}
     className="text-white"
     required

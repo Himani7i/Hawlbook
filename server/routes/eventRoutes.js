@@ -4,6 +4,10 @@ const router = express.Router();
 const { authMiddleware } = require('../middleware/authMiddleware');
 const Event = require('../models/eventRequest');
 const nodemailer = require('nodemailer');
+const { uploadToCloudinary, isFileTypeSupported } = require('../utils/fileUploader');
+
+const fs = require('fs');
+
 
 require('dotenv').config();
 
@@ -13,14 +17,23 @@ router.post('/submit', authMiddleware, async (req, res) => {
     if (!req.files || !req.files.notesheet) {
       return res.status(400).json({ msg: "No file uploaded" });
     }
-
+    
     const file = req.files.notesheet;
-    const filePath = `uploads/${Date.now()}_${file.name}`;
-    await file.mv(filePath);
+    const ext = file.name.split('.').pop();
+    console.log("Received file:", req.files);
+    console.log("Received fields:", req.body);
+
+    if (!isFileTypeSupported(ext)) {
+      return res.status(400).json({
+        success: false,
+        message: "Unsupported file type. Only images, PDFs, and DOCs allowed.",
+      });
+    }
+    const result = await uploadToCloudinary(file, "event_notesheets");
 
     const event = await Event.create({
       student: req.user._id,
-      file: filePath,
+      file: result.secure_url,
       date:req.body.date,
       purpose: req.body.purpose,
       title: req.body.title,

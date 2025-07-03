@@ -1,12 +1,38 @@
 require('dotenv').config();
 const express = require('express');
-
+const http = require('http'); 
+const { Server } = require('socket.io');
 const cors = require('cors');
 const fileUpload = require('express-fileupload');
+const dbConnect = require('./database/database');
+
 const app = express();
 
+const server = http.createServer(app); 
+const io = new Server(server, {
+  cors: {
+    origin: 'http://localhost:3000',
+    credentials: true,
+  },
+});
+const emailToSocketIdMap = new Map();
+const socketidToEmailMap = new Map();
 
-const dbConnect = require('./database/database');
+io.on('connection', (socket) => {
+  console.log('Socket connected', socket.id);
+
+  socket.on("room:join", (data) => {
+    const { email, roomvd } = data;
+    emailToSocketIdMap.set(email, socket.id);
+    socketidToEmailMap.set(socket.id, email);
+    io.to(roomvd).emit("user:joined", { email, id: socket.id });
+    socket.join(roomvd);
+    io.to(socket.id).emit("room:join", data);
+  });
+});
+
+
+
 
 app.use(cors({
   origin: 'http://localhost:3000', 
@@ -36,5 +62,5 @@ app.use('/api/event', eventRoutes);
 
 const PORT = process.env.PORT || 5000;
 dbConnect().then(() => {
-  app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+  server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 });

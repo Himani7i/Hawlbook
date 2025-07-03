@@ -12,6 +12,8 @@ import Loader from "./components/Loader";
 import DSWAdminDashboard     from './pages/DSWAdminDashboard';
 import HODDashboard from './pages/HODDashboard';
 import ProtectedRoute   from './components/ProtectedRoute';
+import LobbyScreen      from './pages/Lobby';
+import RoomPage from './pages/Room';
 
 function App() {
     const [loading, setLoading] = useState(true);
@@ -46,7 +48,8 @@ function App() {
       <main className="ml-64 p-6">
         <h1 className="text-3xl font-bold mb-6 text-center text-vintageAccent">Welcome to the Campus Management System</h1>
         <Routes>
-     
+        <Route path="/lobby" element={<LobbyScreen />} />
+        <Route path="/roomvd/:roomvd" element={<RoomPage />} />
         <Route path="/"       element={<SignupPage />} />
         <Route path="/login"  element={<LoginPage />} />
 

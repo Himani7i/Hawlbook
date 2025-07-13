@@ -31,8 +31,9 @@ io.on('connection', (socket) => {
   });
 });
 
-
-
+ socket.on("user:call", ({ to, offer }) => {
+    io.to(to).emit("incomming:call", { from: socket.id, offer });
+  });
 
 app.use(cors({
   origin: 'http://localhost:3000', 

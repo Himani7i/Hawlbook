@@ -1,12 +1,34 @@
-import React,{useEffect, useCallback, useState} from 'react';
+import React,{useEffect, useCallback, useState, useRef} from 'react';
 import {useSocket} from '../context/SocketProvider';
-import ReactPlayer from 'react-player';
 import peer from '../context/peer';
+
 const RoomPage = () =>{
   const socket = useSocket();
   const [remoteSocketId, setRemoteSocketId] = useState(null);
   const [myStream, setMyStream] = useState();
   const [remoteStream, setRemoteStream] = useState();
+  
+  const myVideoRef = useRef(null);
+  const remoteVideoRef = useRef(null);
+
+  useEffect(() => {
+    if(myVideoRef.current && myStream){
+      myVideoRef.current.srcObject = myStream;
+      myVideoRef.current.play().catch((e) => {
+      console.error("Failed to play local stream:", e);
+    });
+    }
+  }, [myStream]);
+
+  useEffect(() => {
+    if (remoteVideoRef.current && remoteStream) {
+      remoteVideoRef.current.srcObject = remoteStream;
+       remoteVideoRef.current.play().catch((e) => {
+      console.error("Failed to play remote stream:", e);
+    });
+    }
+  }, [remoteStream]);
+
 
   const handleUserJoined = useCallback(({ email, id}) =>{
     console.log(`Email: ${email} joined room`);
@@ -101,41 +123,47 @@ const RoomPage = () =>{
 
 
     return (
-        <div className="flex items-center justify-center h-screen bg-gray-100">
+        <div className="flex flex-col items-center justify-center min-h-screen bg-blue-50 space-y-6 p-6">
         <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
             <h1 className="text-2xl font-bold mb-4 text-center">Room Page</h1>
-           <div>
-           {myStream && <button onClick={sendStreams}>Send Stream</button>}
-           {remoteSocketId && <button  onClick={handleCallUser}>Call</button>}
-           {myStream && (
-           <>
-          <h1>My Stream</h1>
-          <ReactPlayer
-            playing
+        <div className="flex space-x-4">
+          {myStream && (
+          <video
+            ref={myVideoRef}
+            autoPlay
             muted
-            height="100px"
-            width="200px"
-            url={myStream}
+            playsInline
+            className="w-[300px] h-[200px] rounded-lg shadow"
           />
-        </>
-      )}
-      </div>
-       
-      <div>
+        )}
         {remoteStream && (
-        <>
-          <h1>Remote Stream</h1>
-          <ReactPlayer
-            playing
-            muted
-            height="100px"
-            width="200px"
-            url={remoteStream}
+          <video
+            ref={remoteVideoRef}
+            autoPlay
+            playsInline
+            className="w-[300px] h-[200px] rounded-lg shadow"
           />
-        </>
-      )}
-      </div>
+        )}
 
+        </div>
+         <div className="space-x-4">
+          {myStream && (
+          <button
+            onClick={sendStreams}
+            className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+          >
+            Send Stream
+          </button>
+        )}
+        {remoteSocketId && (
+          <button
+            onClick={handleCallUser}
+            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+          >
+            Call
+          </button>
+        )}
+         </div>
         </div>
         </div>
     );

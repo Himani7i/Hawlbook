@@ -1,9 +1,11 @@
-
+import React from 'react';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import API from '../api';
 import { toast } from 'react-hot-toast';
 import { FileUp } from 'lucide-react';
+import { useSocket } from "../context/SocketProvider";
+import { useNavigate } from 'react-router-dom';
 
 function Dashboard() {
   const [bookings, setBookings] = useState([]);
@@ -12,6 +14,9 @@ function Dashboard() {
   const [title, setTitle] = useState('');
 const [purpose, setPurpose] = useState('');
 const [date, setDate] = useState('');
+const socket = useSocket();
+const navigate = useNavigate();
+
 
   useEffect(() => {
     const fetchBookings = async () => {
@@ -28,9 +33,6 @@ const [date, setDate] = useState('');
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
   };
-  
-
-
 const handleUpload = async () => {
   if (!file) return toast.error("Please choose a file first");
   const allowedTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'image/jpeg', 'image/png'];
@@ -153,7 +155,19 @@ if (!allowedTypes.includes(file.type)) {
                    {b.notesheetStatus}
                  </span>
                  </p>
-
+                 {(b.roomApprovalStatus === 'pending' || b.notesheetStatus === 'pending') && (
+  <div className="mt-3 flex gap-3">
+    <button
+      onClick={() => {
+        toast.success("Lobby");
+        navigate('/lobby');
+      }}
+      className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded"
+    >Call HOD/DSW
+    </button>
+    
+  </div>
+)}
                 </li>
               ))}
             </ul>

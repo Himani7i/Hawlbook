@@ -2,14 +2,26 @@
 import { useEffect, useState } from 'react';
 import API from '../api';
 import { toast } from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom'; 
+import { useSocket } from "../context/SocketProvider";
 
 function HODDashboard() {
   const [requests, setRequests] = useState([]);
-  const [user, setUser] = useState(() => {
+  const [incomingCall, setIncomingCall] = useState(null);
+  const [user] = useState(() => {
     const storedUser = localStorage.getItem('user');
     return storedUser ? JSON.parse(storedUser) : null;
   });
+ const navigate = useNavigate();
+ const socket = useSocket();
 
+ useEffect(() => {
+    if (user?.email && socket) {
+      socket.emit("admin:register", { email: user.email });
+      console.log("HOD socket registered with email:", user.email);
+    }
+  }, [socket, user]);
+  
 useEffect(() => {
   const fetchRoomRequests = async () => {
     try {
@@ -26,6 +38,17 @@ useEffect(() => {
   };
   fetchRoomRequests();
 }, []);
+
+useEffect(() => {
+  socket.on("admin:incoming-call", ({ from, roomvd }) => {
+    setIncomingCall({ from, roomvd });
+  });
+
+  return () => {
+    socket.off("admin:incoming-call");
+  };
+}, [socket]);
+ 
 
 
 const handleDecision = async (bookingId, action) => {
@@ -47,6 +70,22 @@ const handleDecision = async (bookingId, action) => {
     toast.error('Failed to update booking status');
     console.error('HOD decision error:', error);
   }
+};
+
+const handleJoinCall = () => {
+  if (incomingCall?.roomvd && user?.email && socket) {
+    socket.emit("room:join", {
+      email: user.email,
+      roomvd: incomingCall.roomvd
+    });
+    navigate(`/roomvd/${incomingCall.roomvd}`);
+  }
+};
+const handleRejectCall = () => {
+  if (incomingCall?.from) {
+      socket.emit('admin:reject-call', { to: incomingCall.from.trim() }); 
+    }
+  setIncomingCall(null); 
 };
 
 
@@ -86,6 +125,28 @@ const handleDecision = async (bookingId, action) => {
           ))}
         </div>
       )}
+      {incomingCall && (
+  <div className="fixed top-6 right-6 bg-[#12263a] text-silver p-4 rounded-xl shadow-lg border border-silver z-50 w-80">
+    <h2 className="text-lg font-bold mb-2">Incoming Video Call</h2>
+    <p className="mb-1"><span className="font-semibold">From:</span> {incomingCall.from}</p>
+    <p className="mb-4"><span className="font-semibold">Room ID:</span> {incomingCall.roomvd}</p>
+    <div className="flex gap-3 justify-end">
+      <button
+        onClick={handleJoinCall}
+        className="bg-green-600 hover:bg-green-700 text-white px-4 py-1 rounded"
+      >
+        Join Call
+      </button>
+      <button
+        onClick={handleRejectCall}
+        className="bg-red-600 hover:bg-red-700 text-white px-4 py-1 rounded"
+      >
+        Reject
+      </button>
+    </div>
+  </div>
+)}
+
     </div>
   );
 }

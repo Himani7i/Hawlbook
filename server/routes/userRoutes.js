@@ -15,4 +15,15 @@ router.get("/roles", (req, res) => {
   }
 });
 
+router.get("/admins", async (req, res) => {
+  try {
+    const admins = await User.find({ role: { $in: ["admin", "Admin", "HOD", "hod"] } });
+    console.log("Fetched admins:", admins);
+    res.status(200).json(admins);
+  } catch (err) {
+    res.status(500).json({ message: "Failed to fetch admins" });
+  }
+});
+
+
 module.exports = router;

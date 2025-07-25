@@ -20,6 +20,10 @@ const socketidToEmailMap = new Map();
 
 io.on('connection', (socket) => {
   console.log('Socket connected', socket.id);
+  socket.on("admin:register", ({ email }) => {
+  emailToSocketIdMap.set(email, socket.id);
+  console.log("Registered admin socket for:", email, " -> ", socket.id);
+});
 
   socket.on("room:join", (data) => {
     const { email, roomvd } = data;
@@ -29,6 +33,24 @@ io.on('connection', (socket) => {
     socket.join(roomvd);
     io.to(socket.id).emit("room:join", data);
   });
+  
+  socket.on("room:call", ({ from, to, roomvd }) => {
+    console.log("EMAIL TO SOCKET MAP", [...emailToSocketIdMap.entries()]);
+  const adminSocketId = emailToSocketIdMap.get(to);
+  if (adminSocketId) {
+    io.to(adminSocketId).emit("admin:incoming-call", { from, roomvd });
+  } else {
+    console.log("Admin not connected or socket ID not found for email:", to);
+  }
+  });
+  
+  socket.on("admin:reject-call", ({ to }) => {
+  const targetSocketId = emailToSocketIdMap.get(to);
+  console.log(`Rejecting call: to=${to}, socketId=${targetSocketId}`);
+  if (targetSocketId) {
+    io.to(targetSocketId).emit("admin:call-rejected");
+  }
+});
 
 
  socket.on("user:call", ({ to, offer }) => {

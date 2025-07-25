@@ -1,6 +1,7 @@
 import React,{useEffect, useCallback, useState, useRef} from 'react';
 import {useSocket} from '../context/SocketProvider';
 import peer from '../context/peer';
+import { toast } from 'react-hot-toast';
 
 const RoomPage = () =>{
   const socket = useSocket();
@@ -104,6 +105,13 @@ const RoomPage = () =>{
       setRemoteStream(remoteStream[0]);
       });
       }, []);
+          
+  useEffect(() => {
+  socket.on("admin:call-rejected", () => {
+    toast.error("Call was rejected by admin 😕");
+  });
+  return () => socket.off("admin:call-rejected");
+  }, [socket]);
 
     useEffect(() => {
         socket.on("user:joined", handleUserJoined);
@@ -123,26 +131,32 @@ const RoomPage = () =>{
 
 
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen bg-blue-50 space-y-6 p-6">
-        <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
-            <h1 className="text-2xl font-bold mb-4 text-center">Room Page</h1>
+        <div className="flex flex-col items-center justify-center min-h-screen  bg-[#0D1B2A] space-y-6 p-6">
+        <div className="bg-[#1B263B] p-8 rounded-2xl shadow-md w-full max-w-md border border-blue-700">
+            <h1 className="text-2xl font-bold mb-4 text-center text-white">Room Page</h1>
         <div className="flex space-x-4">
           {myStream && (
-          <video
+            <div className="flex flex-col items-center">
+              <video
             ref={myVideoRef}
             autoPlay
             muted
             playsInline
-            className="w-[300px] h-[200px] rounded-lg shadow"
+            className="w-[300px] h-[200px] rounded-lg shadow-md border-2 border-blue-800 "
           />
+          <span className="mt-2 text-sm font-semibold text-blue-300">My Stream</span>
+          </div>
         )}
         {remoteStream && (
-          <video
+          <div className="flex flex-col items-center">
+            <video
             ref={remoteVideoRef}
             autoPlay
             playsInline
-            className="w-[300px] h-[200px] rounded-lg shadow"
+            className="w-[300px] h-[200px] rounded-lg shadow-md border-2 border-blue-800"
           />
+         <span className="mt-2 text-sm font-semibold text-blue-300">Remote Stream</span>
+          </div>
         )}
 
         </div>
@@ -150,7 +164,7 @@ const RoomPage = () =>{
           {myStream && (
           <button
             onClick={sendStreams}
-            className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+            className="bg-green-600 text-white px-4 py-2 rounded hover:bg-emerald-500 transition"
           >
             Send Stream
           </button>
@@ -158,7 +172,7 @@ const RoomPage = () =>{
         {remoteSocketId && (
           <button
             onClick={handleCallUser}
-            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-cyan-500 transition"
           >
             Call
           </button>

@@ -71,12 +71,12 @@ if (!allowedTypes.includes(file.type)) {
 
 
   return (
-    <div className="min-h-screen bg-vintageDark text-white mb-10 flex-1 p-6 font-serif">
+    <div className="min-h-screen bg-gradient-to-r from-vintageBlue-dark to-vintageDark text-white  p-6 font-serif">
       <h2 className="text-4xl font-bold text-vintageAccent mb-8 text-center">🎓 Student Dashboard</h2>
 
-      <div className="max-w-2xl mx-auto space-y-6">
+      <div className="max-w-3xl mx-auto space-y-6">
       
-        <div className="bg-white bg-opacity-10 p-6 rounded-lg shadow-md border border-vintageAccent">
+        <div className="bg-vintageDark p-6 rounded-lg shadow-md border border-vintageAccent">
           <h3 className="text-xl mb-2 font-semibold text-vintageAccent">📄 Upload Notesheet for Event Approval</h3>
 <div className="flex flex-col gap-4">
   <input
@@ -84,7 +84,7 @@ if (!allowedTypes.includes(file.type)) {
     placeholder="Event Title"
     value={title}
     onChange={(e) => setTitle(e.target.value)}
-    className="p-2 rounded bg-gray-100 text-black"
+    className="p-2 rounded bg-vintageBlue-dark text-gray-400"
     required
   />
   <input
@@ -92,21 +92,21 @@ if (!allowedTypes.includes(file.type)) {
     placeholder="Purpose of Event"
     value={purpose}
     onChange={(e) => setPurpose(e.target.value)}
-    className="p-2 rounded bg-gray-100 text-black"
+    className="p-2 rounded bg-vintageBlue-dark text-gray-400"
     required
   />
   <input
     type="date"
     value={date}
     onChange={(e) => setDate(e.target.value)}
-    className="p-2 rounded bg-gray-100 text-black"
+    className="p-2 rounded bg-vintageBlue-dark text-gray-400"
     required
   />
   <input
     type="file"
     accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
     onChange={handleFileChange}
-    className="text-white"
+    className="text-gray-400"
     required
   />
   <button
@@ -121,7 +121,7 @@ if (!allowedTypes.includes(file.type)) {
         </div>
 
     
-        <div className="bg-white bg-opacity-10 p-6 rounded-lg shadow-md border border-vintageAccent">
+        <div className="bg-vintageDark p-6 rounded-lg shadow-md border  border-vintageAccent">
           <div className="flex items-center justify-between">
             <h3 className="text-xl font-semibold text-vintageAccent">📅 My Bookings</h3>
             <Link to="/bookings" className="bg-vintageAccent px-3 py-1 rounded-md text-vintageDark font-bold hover:bg-opacity-80 transition">
@@ -138,15 +138,15 @@ if (!allowedTypes.includes(file.type)) {
                   key={b._id}
                   className="p-4 border border-vintageAccent bg-white bg-opacity-10 rounded-lg"
                 >
-                  <p><strong>Room:</strong> {b.room?.roomType || 'N/A'}</p>
-                  <p><strong> Department:</strong> {b.room?.department || 'N/A'}</p>
+                  <p><strong className='text-gray-300'>Room:</strong> {b.room?.roomType || 'N/A'}</p>
+                  <p><strong className='text-gray-300'> Department:</strong> {b.room?.department || 'N/A'}</p>
 
-                  <p><strong>Date:</strong> {new Date(b.date).toLocaleDateString()}</p>
-                  <p><strong>Time:</strong> {b.startTime} - {b.endTime}</p>
-                  <p><strong>Status:</strong> <span className="capitalize text-yellow-300">{b.roomApprovalStatus}</span></p>
-                  <p><strong> Event Title:</strong> {b.eventRef?.title || 'N/A'}</p>
-                  <p><strong>Purpose:</strong> {b.eventRef?.purpose || 'N/A'}</p>
-                  <p><strong>Notesheet Status:</strong> 
+                  <p><strong className='text-gray-300'>Date:</strong> {new Date(b.date).toLocaleDateString()}</p>
+                  <p><strong className='text-gray-300'>Time:</strong> {b.startTime} - {b.endTime}</p>
+                  <p><strong className='text-gray-300'>Status:</strong> <span className="capitalize text-yellow-300">{b.roomApprovalStatus}</span></p>
+                  <p><strong className='text-gray-300'> Event Title:</strong> {b.eventRef?.title || 'N/A'}</p>
+                  <p><strong className='text-gray-300'>Purpose:</strong> {b.eventRef?.purpose || 'N/A'}</p>
+                  <p><strong className='text-gray-300'>Notesheet Status:</strong> 
                   <span className={
                    b.notesheetStatus === 'approved' ? 'text-green-400' :
                    b.notesheetStatus === 'rejected' ? 'text-red-400' :

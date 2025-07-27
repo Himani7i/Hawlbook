@@ -20,7 +20,7 @@ function DSWAdminDashboard() {
    useEffect(() => {
     if (user?.email && socket) {
       socket.emit("admin:register", { email: user.email });
-      console.log("HOD socket registered with email:", user.email);
+      console.log("DSW socket registered with email:", user.email);
     }
   }, [socket, user]);
 
@@ -78,7 +78,7 @@ const handleRejectCall = () => {
       {events.length === 0 ? (
         <p className="text-center text-gray-300">No pending events found 💤</p>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="max-w-6xl mx-auto px-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {events.map(event => (
             <motion.div
               key={event._id}

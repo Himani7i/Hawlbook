@@ -16,7 +16,7 @@ const Sidebar = () => {
   const navigate = useNavigate();
 
   const MIN_WIDTH = 80;  
-  const MAX_WIDTH = 400;
+  const MAX_WIDTH = 200;
 
   const [width, setWidth] = useState(260);
   const isResizing = useRef(false);
@@ -25,7 +25,7 @@ const Sidebar = () => {
 
   const active = (path) =>
     location.pathname === path
-      ? 'bg-blue-800 text-white'
+      ? 'bg-vintageBlue-dark text-white'
       : 'text-blue-300';
 
   const handleLogout = () => {

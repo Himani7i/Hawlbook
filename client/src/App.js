@@ -43,10 +43,10 @@ function App() {
   return (
     <BrowserRouter>
       <Toaster  toastOptions={{ duration: 3000 }} />
-      <div className="flex"><aside className="w-10 bg-slate-500"><Sidebar /></aside>
+      <div className="flex min-h-screen"><Sidebar />
      
-      <main className="ml-64 p-6">
-        <h1 className="text-3xl font-bold mb-6 text-center text-vintageAccent">Welcome to the Campus Management System</h1>
+      <main className="flex-1 bg-vintageDark">
+        <h1 className="text-3xl font-bold mb-6 text-center text-vintageAccent">Welcome</h1>
         <Routes>
         <Route path="/lobby" element={<LobbyScreen />} />
         <Route path="/roomvd/:roomvd" element={<RoomPage />} />

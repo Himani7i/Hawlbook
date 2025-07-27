@@ -96,7 +96,7 @@ const handleRejectCall = () => {
       {requests.length === 0 ? (
         <p className="text-center text-white">No pending room approvals.</p>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-16">
           {requests.map((req) => (
             <div key={req._id} className="bg-white bg-opacity-10 p-6 rounded-lg shadow-md border border-vintageAccent backdrop-blur-md">
               <p><strong>👤 Student:</strong> {req.user?.username}</p>

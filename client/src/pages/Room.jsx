@@ -131,10 +131,10 @@ const RoomPage = () =>{
 
 
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen  bg-[#0D1B2A] space-y-6 p-6">
-        <div className="bg-[#1B263B] p-8 rounded-2xl shadow-md w-full max-w-md border border-blue-700">
-            <h1 className="text-2xl font-bold mb-4 text-center text-white">Room Page</h1>
-        <div className="flex space-x-4">
+        <div className="flex flex-col items-center justify-center min-h-screen  bg-[#0D1B2A] space-y-3 p-6">
+        <div className="bg-[#1B263B] p-8 rounded-2xl shadow-md w-full max-w-5xl mx-auto border border-blue-700 min-h-[80vh]">
+            <h1 className="text-2xl font-bold mb-8 text-center text-white">Room Page</h1>
+        <div className="flex justify-center items-center gap-8 flex-wrap">
           {myStream && (
             <div className="flex flex-col items-center">
               <video
@@ -142,9 +142,9 @@ const RoomPage = () =>{
             autoPlay
             muted
             playsInline
-            className="w-[300px] h-[200px] rounded-lg shadow-md border-2 border-blue-800 "
+            className="w-[450px] h-[350px] rounded-lg shadow-md border-2 border-blue-800 "
           />
-          <span className="mt-2 text-sm font-semibold text-blue-300">My Stream</span>
+          <span className="mt-3 text-lg font-semibold text-blue-300">My Stream</span>
           </div>
         )}
         {remoteStream && (
@@ -153,14 +153,14 @@ const RoomPage = () =>{
             ref={remoteVideoRef}
             autoPlay
             playsInline
-            className="w-[300px] h-[200px] rounded-lg shadow-md border-2 border-blue-800"
+            className="w-[450px] h-[350px] rounded-lg shadow-md border-2 border-blue-800"
           />
-         <span className="mt-2 text-sm font-semibold text-blue-300">Remote Stream</span>
+         <span className="mt-3 text-lg font-semibold text-blue-300">Remote Stream</span>
           </div>
         )}
 
         </div>
-         <div className="space-x-4">
+         <div className="space-x-4 items-center justify-center flex mt-6">
           {myStream && (
           <button
             onClick={sendStreams}

@@ -42,18 +42,18 @@ const [formData, setFormData] = useState({
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gradient-to-r from-blue-200 to-blue-500">
+    <div className="flex justify-center items-center min-h-screen bg-gradient-to-r from-vintageBlue-dark to-vintageDark">
       <form
         onSubmit={handleSubmit}
-        className="bg-white p-8 rounded-2xl shadow-xl w-full max-w-md"
+        className="bg-vintageDark p-8 rounded-2xl shadow-xl w-full max-w-md"
       >
-        <h2 className="text-2xl font-bold mb-6 text-center text-blue-800">Create an Account</h2>
+        <h2 className="text-2xl font-bold mb-6 text-center text-gray-400">Create an Account</h2>
 
         <input
           type="text"
           name="username"
           placeholder="Full Name"
-          className="w-full p-3 mb-4 border rounded-xl"
+          className="w-full p-3 mb-4 border rounded-xl bg-vintageBlue-dark"
           value={formData.username}
           onChange={handleChange}
           required
@@ -63,7 +63,7 @@ const [formData, setFormData] = useState({
           type="email"
           name="email"
           placeholder="Email"
-          className="w-full p-3 mb-4 border rounded-xl"
+          className="w-full p-3 mb-4 border rounded-xl bg-vintageBlue-dark"
           value={formData.email}
           onChange={handleChange}
           required
@@ -73,7 +73,7 @@ const [formData, setFormData] = useState({
           type="password"
           name="password"
           placeholder="Password"
-          className="w-full p-3 mb-4 border rounded-xl"
+          className="w-full p-3 mb-4 border rounded-xl bg-vintageBlue-dark"
           value={formData.password}
           onChange={handleChange}
           required
@@ -83,7 +83,7 @@ const [formData, setFormData] = useState({
           type="tel"
           name="phone"
           placeholder="Phone Number"
-          className="w-full p-3 mb-4 border rounded-xl"
+          className="w-full p-3 mb-4 border rounded-xl bg-vintageBlue-dark text-gray-400"
           value={formData.phone}
           onChange={handleChange}
           required
@@ -91,34 +91,34 @@ const [formData, setFormData] = useState({
 
         <select
           name="role"
-          className="w-full p-3 mb-4 border rounded-xl bg-white text-gray-800"
+          className="w-full p-3 mb-4 border rounded-xl bg-vintageBlue-dark text-gray-400"
           value={formData.role}
           onChange={handleChange}
           required
         >
         
-          <option value="student">Student</option>
-          <option value="HOD">HOD</option>
-          <option value="admin">Admin</option>
+          <option className='bg-vintageDark' value="student">Student</option>
+          <option className='bg-vintageDark' value="HOD">HOD</option>
+          <option className='bg-vintageDark' value="admin">Admin</option>
 
         </select>
 
         <select
           name="department"
-          className="w-full p-3 mb-6 border rounded-xl bg-white text-gray-800"
+          className="w-full p-3 mb-6 border rounded-xl bg-vintageBlue-dark text-gray-400"
           value={formData.department}
           onChange={handleChange}
           required
         >
        
-          <option value="CSE">CSE</option>
-          <option value="ECE">ECE</option>
-          <option value="GENERAL">GENERAL</option>
+          <option className='bg-vintageDark'  value="CSE">CSE</option>
+          <option className='bg-vintageDark'  value="ECE">ECE</option>
+          <option className='bg-vintageDark'  value="GENERAL">GENERAL</option>
         </select>
 
         <button
           type="submit"
-          className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-xl font-semibold transition duration-200"
+          className="w-full bg-blue-800 hover:bg-blue-900 text-gray-200 py-2 px-4 rounded-xl font-semibold transition duration-200"
         >
           Sign Up
         </button>

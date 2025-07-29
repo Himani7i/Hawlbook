@@ -2,13 +2,17 @@ import React,{useEffect, useCallback, useState, useRef} from 'react';
 import {useSocket} from '../context/SocketProvider';
 import peer from '../context/peer';
 import { toast } from 'react-hot-toast';
+import { useNavigate,useParams } from "react-router-dom";
 
 const RoomPage = () =>{
   const socket = useSocket();
   const [remoteSocketId, setRemoteSocketId] = useState(null);
   const [myStream, setMyStream] = useState();
   const [remoteStream, setRemoteStream] = useState();
-  
+  const [isMuted, setIsMuted] = useState(false);
+  const [isCameraOn, setIsCameraOn] = useState(true);
+  const { roomvd } = useParams();
+  const navigate = useNavigate();
   const myVideoRef = useRef(null);
   const remoteVideoRef = useRef(null);
 
@@ -112,6 +116,48 @@ const RoomPage = () =>{
   });
   return () => socket.off("admin:call-rejected");
   }, [socket]);
+   
+  const toggleMute = () => {
+  if (myStream) {
+    const audioTrack = myStream.getAudioTracks()[0];
+    if (audioTrack) {
+      audioTrack.enabled = !audioTrack.enabled;
+      setIsMuted(!audioTrack.enabled);
+    }
+  }
+};
+
+const toggleCamera = () => {
+  if (myStream) {
+    const videoTrack = myStream.getVideoTracks()[0];
+    if (videoTrack) {
+      videoTrack.enabled = !videoTrack.enabled;
+      setIsCameraOn(videoTrack.enabled);
+    }
+  }
+};
+const stopMediaTracks = () => {
+  if (myStream) myStream.getTracks().forEach(track => track.stop());setMyStream(null);
+  if (remoteStream) remoteStream.getTracks().forEach(track => track.stop());setRemoteStream(null);
+};
+const handleEndCall = () => {
+  stopMediaTracks();
+  socket.emit("call:ended", { to: remoteSocketId });
+};
+useEffect(() => {
+  socket.on("call:ended", () => {
+    toast.success("Call ended successfully.");
+     stopMediaTracks();
+      navigate(`/roomvd/${roomvd}`);
+  });
+
+  return () => {
+    socket.off("call:ended");
+  };
+}, [socket]);
+
+
+
 
     useEffect(() => {
         socket.on("user:joined", handleUserJoined);
@@ -177,6 +223,30 @@ const RoomPage = () =>{
             Call
           </button>
         )}
+          <button
+    onClick={toggleMute}
+    className={`px-4 py-2 rounded ${
+      isMuted ? 'bg-red-600' : 'bg-green-600'
+    } text-white transition`}
+  >
+    {isMuted ? 'Unmute' : 'Mute'}
+  </button>
+
+  <button
+    onClick={toggleCamera}
+    className={`px-4 py-2 rounded ${
+      isCameraOn ? 'bg-green-600' : 'bg-red-600'
+    } text-white transition`}
+  >
+    {isCameraOn ? 'Turn Off Camera' : 'Turn On Camera'}
+  </button>
+  <button
+    onClick={handleEndCall}
+    className="bg-red-600 hover:bg-red-700 text-white font-semibold px-4 py-2 rounded shadow transition"
+  >
+    End Call
+  </button>
+
          </div>
         </div>
         </div>

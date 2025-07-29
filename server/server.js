@@ -70,6 +70,14 @@ io.on('connection', (socket) => {
     console.log("peer:nego:done", ans);
     io.to(to).emit("peer:nego:final", { from: socket.id, ans });
   });
+
+  
+  socket.on("call:ended", ({ to }) => {
+    io.to(to).emit("call:ended");
+    socket.emit("call:ended");
+  });
+
+
   
 });
 

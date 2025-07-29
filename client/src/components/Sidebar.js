@@ -92,13 +92,32 @@ const Sidebar = () => {
             {!collapsed && 'Book Room'}
           </Link>
           <Link
-            to="/admin"
+            to="/dsw"
             className={`flex items-center gap-3 px-4 py-3 rounded-lg transition ${active('/admin')}`}
             title="Admin Panel"
           >
             <LayoutDashboard size={20} />
             {!collapsed && 'Admin Panel'}
           </Link>
+          
+          <Link
+          to="/lobby"
+          className={`flex items-center gap-3 px-4 py-3 rounded-lg transition ${active('/lobby')}`}
+          title="Lobby"
+          >
+          <LayoutDashboard size={20} />
+          {!collapsed && 'Lobby Panel'}   
+          </Link>
+
+          <Link
+          to="/hod"
+          className={`flex items-center gap-3 px-4 py-3 rounded-lg transition ${active('/hod')}`}
+          title="HOD Panel"
+          >
+          <LayoutDashboard size={20} />
+          {!collapsed && 'HOD Panel'}
+          </Link>
+
           <Link
             to="/login"
             className={`flex items-center gap-3 px-4 py-3 rounded-lg transition ${active('/login')}`}

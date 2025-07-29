@@ -9,7 +9,10 @@ export const useSocket = () => {
 };
 
 export const SocketProvider = ({ children }) => {
-  const socket = useMemo(() => io(process.env.REACT_APP_API_URL), []); 
+  const socket = useMemo(() => io(process.env.REACT_APP_API_URL,{
+  withCredentials: true,
+  transports: ['websocket'],
+}), []); 
 
   return (
     <SocketContext.Provider value={socket}>

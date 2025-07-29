@@ -25,7 +25,7 @@ const BookingForm = () => {
       const fetchEvents = async () => {
     try {
       const res = await API.get('/event/approved');
-       console.log('Approved Events:', res.data);
+      //  console.log('Approved Events:', res.data);
       setEvents(res.data);
     } catch (err) {
       toast.error('Failed to load your approved events');
@@ -35,7 +35,7 @@ const BookingForm = () => {
     const fetchRooms = async () => {
       try {
         const res = await API.get('/room/all');
-        console.log('Rooms:', res.data.rooms);
+        // console.log('Rooms:', res.data.rooms);
         setRooms(res.data.rooms);
       } catch (err) {
         toast.error('Failed to load rooms 😢');

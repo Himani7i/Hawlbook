@@ -36,7 +36,7 @@ const RoomPage = () =>{
 
 
   const handleUserJoined = useCallback(({ email, id}) =>{
-    console.log(`Email: ${email} joined room`);
+    // console.log(`Email: ${email} joined room`);
     setRemoteSocketId(id);
   }, []);
 
@@ -65,7 +65,7 @@ const RoomPage = () =>{
         audio: true
       });
       setMyStream(stream);
-      console.log("Incoming call from:", from,offer);
+      // console.log("Incoming call from:", from,offer);
       const ans = await peer.getAnswer(offer);
       socket.emit("user:answer", { to: from, answer: ans });  
     },[socket]);

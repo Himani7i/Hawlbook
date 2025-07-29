@@ -20,7 +20,7 @@ function DSWAdminDashboard() {
    useEffect(() => {
     if (user?.email && socket) {
       socket.emit("admin:register", { email: user.email });
-      console.log("DSW socket registered with email:", user.email);
+      // console.log("DSW socket registered with email:", user.email);
     }
   }, [socket, user]);
 

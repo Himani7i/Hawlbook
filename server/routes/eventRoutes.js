@@ -20,8 +20,8 @@ router.post('/submit', authMiddleware, async (req, res) => {
     
     const file = req.files.notesheet;
     const ext = file.name.split('.').pop();
-    console.log("Received file:", req.files);
-    console.log("Received fields:", req.body);
+    // console.log("Received file:", req.files);
+    // console.log("Received fields:", req.body);
 
     if (!isFileTypeSupported(ext)) {
       return res.status(400).json({

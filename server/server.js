@@ -19,10 +19,10 @@ const emailToSocketIdMap = new Map();
 const socketidToEmailMap = new Map();
 
 io.on('connection', (socket) => {
-  console.log('Socket connected', socket.id);
+  // console.log('Socket connected', socket.id);
   socket.on("admin:register", ({ email }) => {
   emailToSocketIdMap.set(email, socket.id);
-  console.log("Registered admin socket for:", email, " -> ", socket.id);
+  // console.log("Registered admin socket for:", email, " -> ", socket.id);
 });
 
   socket.on("room:join", (data) => {
@@ -35,7 +35,7 @@ io.on('connection', (socket) => {
   });
   
   socket.on("room:call", ({ from, to, roomvd }) => {
-    console.log("EMAIL TO SOCKET MAP", [...emailToSocketIdMap.entries()]);
+    // console.log("EMAIL TO SOCKET MAP", [...emailToSocketIdMap.entries()]);
   const adminSocketId = emailToSocketIdMap.get(to);
   if (adminSocketId) {
     io.to(adminSocketId).emit("admin:incoming-call", { from, roomvd });
@@ -46,7 +46,7 @@ io.on('connection', (socket) => {
   
   socket.on("admin:reject-call", ({ to }) => {
   const targetSocketId = emailToSocketIdMap.get(to);
-  console.log(`Rejecting call: to=${to}, socketId=${targetSocketId}`);
+  // console.log(`Rejecting call: to=${to}, socketId=${targetSocketId}`);
   if (targetSocketId) {
     io.to(targetSocketId).emit("admin:call-rejected");
   }
@@ -62,12 +62,12 @@ io.on('connection', (socket) => {
   });
 
   socket.on("peer:nego:needed", ({ to, offer }) => {
-    console.log("peer:nego:needed", offer);
+    // console.log("peer:nego:needed", offer);
     io.to(to).emit("peer:nego:needed", { from: socket.id, offer });
   });
 
   socket.on("peer:nego:done", ({ to, ans }) => {
-    console.log("peer:nego:done", ans);
+    // console.log("peer:nego:done", ans);
     io.to(to).emit("peer:nego:final", { from: socket.id, ans });
   });
 

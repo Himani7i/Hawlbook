@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 // CREATE BOOKING
 const createBooking = async (req, res) => {
   try {
-    console.log("Booking Request Body:", req.body);
+    // console.log("Booking Request Body:", req.body);
     const { roomId, date, startTime, endTime, eventRef } = req.body;
 
     
@@ -135,7 +135,7 @@ const approveOrRejectBooking = async (req, res) => {
 
 const getHODRoomRequests = async (req, res) => {
   try {
-      console.log("🎯 Logged-in user (HOD):", req.user);
+      // console.log(" Logged-in user (HOD):", req.user);
     if (req.user.role !== 'HOD') {
       return res.status(403).json({ message: 'Access denied' });
     }

@@ -25,7 +25,7 @@ const LoginPage = () => {
       localStorage.setItem('token', token);
       localStorage.setItem('user', JSON.stringify(user));
 
-      toast.success(`Welcome back, ${user.name}!`);
+      toast.success(`Welcome back, ${user.username}!`);
 
       
       if (user.role === 'student') navigate('/dashboard');

@@ -20,7 +20,7 @@ const LobbyScreen = () => {
       try {
         const res = await axios.get("http://localhost:5000/api/v1/user/admins"); 
         setAdmins(res.data);
-         console.log("Fetched admins:", res.data); 
+        //  console.log("Fetched admins:", res.data); 
       } catch (err) {
         console.error("Error fetching admins", err);
       }
@@ -32,7 +32,7 @@ const LobbyScreen = () => {
     (e) => {
       e.preventDefault();
       socket.emit("room:join", { email, roomvd });
-      console.log("Form submitted with:", { email, roomvd });
+      // console.log("Form submitted with:", { email, roomvd });
     },
     [email, roomvd, socket]
   );

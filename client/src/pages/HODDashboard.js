@@ -18,7 +18,7 @@ function HODDashboard() {
  useEffect(() => {
     if (user?.email && socket) {
       socket.emit("admin:register", { email: user.email });
-      console.log("HOD socket registered with email:", user.email);
+      // console.log("HOD socket registered with email:", user.email);
     }
   }, [socket, user]);
   

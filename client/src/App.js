@@ -39,20 +39,25 @@ function App() {
     return () => clearInterval(timer);
   }, []);
 
+  const isLoggedIn = () => {
+  const token = localStorage.getItem('token');
+  const user = localStorage.getItem('user');
+  return token && user;
+};
+
+
   if (loading) return <Loader count={count} />;
   return (
     <BrowserRouter>
       <Toaster  toastOptions={{ duration: 3000 }} />
+      {isLoggedIn() ? (
       <div className="flex min-h-screen"><Sidebar />
-     
+      
       <main className="flex-1 bg-vintageDark">
         <h1 className="text-3xl font-bold mb-6 text-center text-vintageAccent">Welcome</h1>
         <Routes>
-        <Route path="/lobby" element={<LobbyScreen />} />
-        <Route path="/roomvd/:roomvd" element={<RoomPage />} />
-        <Route path="/"       element={<SignupPage />} />
-        <Route path="/login"  element={<LoginPage />} />
-
+        <Route path="/lobby" element={<ProtectedRoute allowedRoles={['student', 'HOD','admin']}><LobbyScreen /></ProtectedRoute>} />
+        <Route path="/roomvd/:roomvd" element={<ProtectedRoute allowedRoles={['student','HOD','admin']}><RoomPage /></ProtectedRoute>} />
     
         <Route
           path="/dashboard"
@@ -63,13 +68,13 @@ function App() {
           }
         />
         <Route
-  path="/hod"
-  element={
-    <ProtectedRoute allowedRoles={['HOD']}>
-      <HODDashboard />
-    </ProtectedRoute>
-  }
-/>
+          path="/hod"
+          element={
+         <ProtectedRoute allowedRoles={['HOD']}>
+          <HODDashboard />
+         </ProtectedRoute>
+        }
+        />
         <Route
           path="/bookings"
           element={
@@ -86,11 +91,22 @@ function App() {
             </ProtectedRoute>
           }
         />
-
         <Route path="*" element={<LoginPage />} />
       </Routes>
       </main>
       </div>
+      ) :
+      (<div className="flex min-h-screen"><Sidebar />
+      
+      <main className="flex-1 bg-vintageDark">
+        <h1 className="text-3xl font-bold mb-6 text-center text-vintageAccent">Welcome</h1>
+        <Routes>
+        <Route path="/"       element={<SignupPage />} />
+        <Route path="/login"  element={<LoginPage />} />
+      </Routes>
+      </main>
+      </div>
+      )}
       
     </BrowserRouter>
   );

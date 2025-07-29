@@ -18,7 +18,7 @@ const LobbyScreen = () => {
   useEffect(() => {
     const fetchAdmins = async () => {
       try {
-        const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/v1/user/admins`); 
+        const res = await axios.get('https://hawlbook.onrender.com/api/v1/user/admins'); 
         setAdmins(res.data);
         //  console.log("Fetched admins:", res.data); 
       } catch (err) {

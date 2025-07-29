@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
-const bcrypt = require('bcrypt');
+const bcrypt = require("bcryptjs");
+
 
 const rolesEnum = ['admin','HOD', 'student'];
 

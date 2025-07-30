@@ -10,14 +10,28 @@ import { useSocket } from "../context/SocketProvider";
 function DSWAdminDashboard() {
   const [events, setEvents] = useState([]);
   const [incomingCall, setIncomingCall] = useState(null);
-  const [user] = useState(() => {
-    const storedUser = localStorage.getItem('user');
-    return storedUser ? JSON.parse(storedUser) : null;
-  });
+  // const [user] = useState(() => {
+  //   const storedUser = localStorage.getItem('user');
+  //   return storedUser ? JSON.parse(storedUser) : null;
+  // });
+  const [user, setUser] = useState(null);
   const navigate = useNavigate();
   const socket = useSocket();
-  
-   useEffect(() => {
+  useEffect(() => {
+  const fetchUser = async () => {
+    try {
+      const res = await API.get('/v1/auth/me', { withCredentials: true });
+      setUser(res.data); 
+    } catch (err) {
+      console.error('Not authenticated:', err);
+      navigate('/login'); 
+    }
+  };
+
+  fetchUser();
+}, []);
+
+  useEffect(() => {
     if (user?.email && socket) {
       socket.emit("admin:register", { email: user.email });
       // console.log("DSW socket registered with email:", user.email);

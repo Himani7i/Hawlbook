@@ -15,6 +15,20 @@ const RoomPage = () =>{
   const navigate = useNavigate();
   const myVideoRef = useRef(null);
   const remoteVideoRef = useRef(null);
+  useEffect(() => {
+  const fetchUser = async () => {
+    try {
+      await axios.get('https://hawlbook.onrender.com/api/v1/auth/me', {
+        withCredentials: true,
+      });
+    } catch (err) {
+      toast.error("You need to be logged in to join a room 😢");
+      navigate("/login");
+    }
+  };
+
+  fetchUser();
+}, [navigate]);
 
   useEffect(() => {
     if(myVideoRef.current && myStream){

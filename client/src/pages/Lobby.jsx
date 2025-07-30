@@ -7,18 +7,35 @@ const generateRoomID = () => {
     return Math.random().toString(36).substring(2, 10);
   };
 const LobbyScreen = () => {
-  const [email, setEmail] = useState("");
+  const [user, setUser] = useState(null);
   const [roomvd, setRoomvd] = useState(generateRoomID());
   const [copied, setCopied] = useState(false);
   const [admins, setAdmins] = useState([]);
   const [selectedAdminId, setSelectedAdminId] = useState("");
   const socket = useSocket();
   const navigate = useNavigate();
-  
+  useEffect(() => {
+  const fetchUser = async () => {
+    try {
+      const res = await axios.get('https://hawlbook.onrender.com/api/v1/auth/me', {
+        withCredentials: true,
+      });
+      setUser(res.data);
+    } catch (err) {
+      toast.error("You're not logged in 😢");
+      navigate("/login");
+    }
+  };
+
+  fetchUser();
+}, [navigate]);
+
   useEffect(() => {
     const fetchAdmins = async () => {
       try {
-        const res = await axios.get('https://hawlbook.onrender.com/api/v1/user/admins'); 
+        const res = await axios.get('https://hawlbook.onrender.com/api/v1/user/admins', {
+  withCredentials: true
+}); 
         setAdmins(res.data);
         //  console.log("Fetched admins:", res.data); 
       } catch (err) {
@@ -31,10 +48,11 @@ const LobbyScreen = () => {
   const handleSubmitForm = useCallback(
     (e) => {
       e.preventDefault();
-      socket.emit("room:join", { email, roomvd });
+      if (!user) return;
+      socket.emit("room:join", { email: user.email, roomvd });
       // console.log("Form submitted with:", { email, roomvd });
-    },
-    [email, roomvd, socket]
+    }
+ 
   );
 
   const handleJoinRoom = useCallback(
@@ -71,7 +89,7 @@ const LobbyScreen = () => {
     return;
   }
     socket.emit("room:call", {
-      from: email,
+      from: user.email,
       to: admin.email,
       roomvd: roomvd,
     });
@@ -95,20 +113,10 @@ const LobbyScreen = () => {
           Lobby
         </h1>
 
-        <div className="mb-4">
-          <label htmlFor="email" className="block mb-2 font-semibold">
-           Your Email:
-          </label>
-          <input
-            type="email"
-            id="email"
-            className="w-full px-4 py-2 rounded-md bg-[#1c2d45] text-silver border border-gray-500 focus:outline-none focus:ring-2 focus:ring-silver"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="user@mitsgwl.ac.in"
-            required
-          />
-        </div>
+      <div className="mb-4 text-sm text-gray-400">
+       Logged in as <span className="font-semibold">{user?.email}</span>
+      </div>
+
 
         <div className="mb-4">
           <label htmlFor="roomvd" className="block mb-2 font-semibold">
@@ -187,6 +195,7 @@ const LobbyScreen = () => {
 
         <button
           type="submit"
+          disabled={!user}
           className="w-full bg-[#0d3b66] hover:bg-[#155d8b] text-white font-bold py-2 rounded-md transition"
         >
           Create & Join Room

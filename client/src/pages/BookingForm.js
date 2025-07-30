@@ -7,10 +7,12 @@ const BookingForm = () => {
   
   const [rooms, setRooms] = useState([]);
   const [events, setEvents] = useState([]);
-  const [user, setUser] = useState(() => {
-  const storedUser = localStorage.getItem('user');
-  return storedUser ? JSON.parse(storedUser) : null;
-});
+//   const [user, setUser] = useState(() => {
+//   const storedUser = localStorage.getItem('user');
+//   return storedUser ? JSON.parse(storedUser) : null;
+// });
+const [user, setUser] = useState(null);
+
 
   const [formData, setFormData] = useState({
     roomId: '',
@@ -20,11 +22,23 @@ const BookingForm = () => {
     endTime: '',
      eventRef: '',
   });
+  useEffect(() => {
+  const fetchUser = async () => {
+    try {
+      const res = await API.get('/v1/auth/me', { withCredentials: true });
+      setUser(res.data);
+    } catch (err) {
+      toast.error("Not logged in 😢");
+    }
+  };
+
+  fetchUser();
+}, []);
 
   useEffect(() => {
       const fetchEvents = async () => {
     try {
-      const res = await API.get('/event/approved');
+      const res = await API.get('/event/approved', { withCredentials: true });
       //  console.log('Approved Events:', res.data);
       setEvents(res.data);
     } catch (err) {
@@ -34,7 +48,7 @@ const BookingForm = () => {
   };
     const fetchRooms = async () => {
       try {
-        const res = await API.get('/room/all');
+        const res = await API.get('/room/all', { withCredentials: true });
         // console.log('Rooms:', res.data.rooms);
         setRooms(res.data.rooms);
       } catch (err) {
@@ -52,10 +66,7 @@ const BookingForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await API.post('/booking/book', {
-        ...formData,
-        userId: user._id,
-      });
+      const res = await API.post('/booking/book',formData, { withCredentials: true });
       toast.success('Room booked successfully 🎉');
     } catch (err) {
       toast.error(err.response?.data?.message || 'Booking failed 💥');

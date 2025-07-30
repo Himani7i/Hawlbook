@@ -24,11 +24,11 @@ const [formData, setFormData] = useState({
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await API.post('/v1/user/signup', formData);
-      const { token, user } = res.data;
+      const res = await API.post('/v1/user/signup', formData, { withCredentials: true });
+      const {user} = res.data;
 
-      localStorage.setItem('token', token);
-      localStorage.setItem('user', JSON.stringify(user));
+      // localStorage.setItem('token', token);
+      // localStorage.setItem('user', JSON.stringify(user));
 
       toast.success(`Welcome, ${user.username}! 🎉`);
 

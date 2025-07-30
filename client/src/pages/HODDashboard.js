@@ -8,12 +8,26 @@ import { useSocket } from "../context/SocketProvider";
 function HODDashboard() {
   const [requests, setRequests] = useState([]);
   const [incomingCall, setIncomingCall] = useState(null);
-  const [user] = useState(() => {
-    const storedUser = localStorage.getItem('user');
-    return storedUser ? JSON.parse(storedUser) : null;
-  });
+  // const [user] = useState(() => {
+  //   const storedUser = localStorage.getItem('user');
+  //   return storedUser ? JSON.parse(storedUser) : null;
+  // });
+ const [user, setUser] = useState(null);
  const navigate = useNavigate();
  const socket = useSocket();
+ useEffect(() => {
+  const fetchUser = async () => {
+    try {
+      const res = await API.get('/v1/auth/me', { withCredentials: true });
+      setUser(res.data); 
+    } catch (err) {
+      console.error('User fetch failed:', err);
+      navigate('/login');
+    }
+  };
+
+  fetchUser();
+}, []);
 
  useEffect(() => {
     if (user?.email && socket) {
@@ -25,11 +39,7 @@ function HODDashboard() {
 useEffect(() => {
   const fetchRoomRequests = async () => {
     try {
-      const res = await API.get('/booking/hod/requests', {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`
-        }
-      });
+      const res = await API.get('/booking/hod/requests', { withCredentials: true });
       setRequests(res.data); 
     } catch (error) {
       console.error('Error fetching HOD requests:', error);
@@ -56,12 +66,7 @@ const handleDecision = async (bookingId, action) => {
     const res = await API.put(
       `/booking/hod/decision/${bookingId}`,
       { status: action }, 
-      {
-        headers: {
-            'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('token')}`
-        }
-      }
+       { withCredentials: true }
     );
 
     toast.success(`Booking ${action}ed successfully!`);

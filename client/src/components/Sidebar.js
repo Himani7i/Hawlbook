@@ -28,11 +28,28 @@ const Sidebar = () => {
       ? 'bg-vintageBlue-dark text-white'
       : 'text-blue-300';
 
-  const handleLogout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
+  const handleLogout = async () => {
+  try {
+    await API.get('/v1/auth/logout', { withCredentials: true });
+    toast.success('Logged out!');
     navigate('/login');
+  } catch (err) {
+    toast.error('Logout failed 😬');
+  }
+};
+
+useEffect(() => {
+  const checkAuth = async () => {
+    try {
+      await API.get('/v1/auth/me', { withCredentials: true });
+    } catch (err) {
+      navigate('/login');
+    }
   };
+
+  checkAuth();
+}, []);
+
 
   useEffect(() => {
     const handleMouseMove = (e) => {

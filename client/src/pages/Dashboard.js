@@ -17,8 +17,7 @@ const [date, setDate] = useState('');
 const socket = useSocket();
 const navigate = useNavigate();
 
-
-  useEffect(() => {
+useEffect(() => {
     const fetchBookings = async () => {
       try {
         const res = await API.get('/booking/my-bookings');
@@ -49,15 +48,11 @@ if (!allowedTypes.includes(file.type)) {
  formData.append("purpose", purpose);
  formData.append("date", date);
 
-  const token = localStorage.getItem("token"); 
+  // const token = localStorage.getItem("token"); 
 
   setUploading(true);
   try {
-    const res = await API.post('/event/submit', formData, {
-      headers: {
-        'Authorization': `Bearer ${token}`
-        
-      }
+    const res = await API.post('/event/submit', formData, { withCredentials: true,
     });
 
     toast.success("Notesheet uploaded successfully");

@@ -18,12 +18,12 @@ const LoginPage = () => {
     e.preventDefault();
 
     try {
-      const res = await API.post('/v1/auth/login', formData);
-      const { token, user } = res.data;
+      const res = await API.post('/v1/auth/login', formData, { withCredentials: true });
+      const { user } = res.data;
 
      
-      localStorage.setItem('token', token);
-      localStorage.setItem('user', JSON.stringify(user));
+      // localStorage.setItem('token', token);
+      // localStorage.setItem('user', JSON.stringify(user));
 
       toast.success(`Welcome back, ${user.username}!`);
 

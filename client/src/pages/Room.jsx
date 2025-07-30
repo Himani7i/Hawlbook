@@ -39,7 +39,13 @@ const RoomPage = () =>{
       console.error("Failed to play local stream:", e);
     });
     }
-  }, [myStream]);
+    return () => {
+    if (myVideoRef.current) {
+      myVideoRef.current.pause();
+      myVideoRef.current.srcObject = null;
+    }
+  };
+}, [myStream]);
 
   useEffect(() => {
     if (remoteVideoRef.current && remoteStream) {
@@ -48,7 +54,13 @@ const RoomPage = () =>{
       console.error("Failed to play remote stream:", e);
     });
     }
-  }, [remoteStream]);
+ return () => {
+    if (remoteVideoRef.current) {
+      remoteVideoRef.current.pause();
+      remoteVideoRef.current.srcObject = null;
+    }
+  };
+}, [remoteStream]);
 
 
   const handleUserJoined = useCallback(({ email, id}) =>{
@@ -153,8 +165,10 @@ const toggleCamera = () => {
   }
 };
 const stopMediaTracks = () => {
-  if (myStream) myStream.getTracks().forEach(track => track.stop());setMyStream(null);
-  if (remoteStream) remoteStream.getTracks().forEach(track => track.stop());setRemoteStream(null);
+  if (myStream){ myStream.getTracks().forEach(track => track.stop());setMyStream(null);}
+  if (remoteStream){ remoteStream.getTracks().forEach(track => track.stop());setRemoteStream(null);}
+  if (myVideoRef.current) myVideoRef.current.srcObject = null;
+  if (remoteVideoRef.current) remoteVideoRef.current.srcObject = null;
 };
 const handleEndCall = () => {
   stopMediaTracks();

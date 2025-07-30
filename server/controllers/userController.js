@@ -22,18 +22,38 @@ exports.signup = async (req, res) => {
 
   
 
-res.status(201).json({
-  message: 'User registered successfully',
-  token,
-  user: {
-    _id: newUser._id,
-    username: newUser.username,
-    email: newUser.email,
-    phone: newUser.phone,
-    role: newUser.role,
-    department: newUser.department
-  }
-});
+// res.status(201).json({
+//   message: 'User registered successfully',
+//   token,
+//   user: {
+//     _id: newUser._id,
+//     username: newUser.username,
+//     email: newUser.email,
+//     phone: newUser.phone,
+//     role: newUser.role,
+//     department: newUser.department
+//   }
+// });
+res
+  .cookie("token", token, {
+    httpOnly: true,
+    secure: true,
+    sameSite: "None",
+    maxAge: 1450 * 1000 * 60
+  })
+  .status(201)
+  .json({
+    message: 'User registered successfully',
+    user: {
+      _id: newUser._id,
+      username: newUser.username,
+      email: newUser.email,
+      phone: newUser.phone,
+      role: newUser.role,
+      department: newUser.department
+    }
+  });
+
 
   } catch (err) {
     console.error('Signup error:', err);

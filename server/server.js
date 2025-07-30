@@ -5,7 +5,7 @@ const { Server } = require('socket.io');
 const cors = require('cors');
 const fileUpload = require('express-fileupload');
 const dbConnect = require('./database/database');
-
+const cookieParser = require('cookie-parser');
 const app = express();
 
 const server = http.createServer(app); 
@@ -81,7 +81,7 @@ io.on('connection', (socket) => {
   
 });
 
-
+app.use(cookieParser());
 app.use(cors({
   origin: ['http://localhost:3000', 'https://hawlbook.vercel.app'], 
   credentials: true,

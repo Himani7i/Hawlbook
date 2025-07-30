@@ -3,6 +3,8 @@ import {useSocket} from '../context/SocketProvider';
 import peer from '../context/peer';
 import { toast } from 'react-hot-toast';
 import { useNavigate,useParams } from "react-router-dom";
+import axios from 'axios';
+
 
 const RoomPage = () =>{
   const socket = useSocket();

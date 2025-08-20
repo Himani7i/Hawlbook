@@ -107,7 +107,7 @@ const handleRejectCall = () => {
 
                   <p><strong>Date:</strong> {new Date(event.date).toLocaleDateString()}</p>
                   <p><strong>Purpose:</strong> {event.purpose}</p>
-                 <a href={`http://localhost:5000/${event.file}`} target="_blank" rel="noreferrer" className="underline text-blue-300">View Notesheet</a>
+                 <a href={`https://hawlbook.vercel.app/${event.file}`} target="_blank" rel="noreferrer" className="underline text-blue-300">View Notesheet</a>
 
                   <div className="flex gap-4 pt-4">
                     <Button
